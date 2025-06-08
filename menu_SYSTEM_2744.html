@@ -1,0 +1,69 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<h2 align="center">Laudo - AIH</h2>
+ 
+<script type="text/javascript">
+
+function processa_laudo(){
+	 if($("#prontuario").val() == ""){
+		 alert("Digite um prontuario ! ");
+		 $('#prontuario').focus();
+		 return;
+	 }	
+
+	
+	 var params = "Param=processa_laudo";
+	 params += "&prontuario="+$("#prontuario").val(); 
+		 $.ajax({
+		 type: "POST",
+		 url: "_view/app/system/processa_laudo.php",
+		 data: params,
+		 success: function(data){		
+		  $("#content").html(data);
+		}
+	});	
+}   
+
+</script>  
+
+<script type="text/javascript" language="javascript" src="jscripts/modal-window.min.js"></script>        
+
+<script>$("#prontuario").focus(); $("#prontuario").css({'border-color':'#A52A2A'});</script>
+
+	<link href="css/modal-window.css" type="text/css" rel="stylesheet" />
+
+	<!-- <link rel="stylesheet" type="text/css" media="all" href="css/style.css" /> -->
+   
+</head>
+<body>
+
+
+
+
+	<div id="page-content-wrapper">
+	
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<b>Digite um prontuario</b>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-6">                        
+			          <p>Prontu&aacute;rio: &nbsp;
+			            <input name="prontuario" type="text" id="prontuario" size="12" class="inputText">&nbsp;&nbsp; <button type="button" class="btn btn-success" onclick="processa_laudo();">Buscar </button><br><br>
+              
+					</div>
+                   
+				</div>
+                <div id="content"></div>                   
+			</div>
+            
+		<!-- /.panel-body -->
+		</div>
+		
+			   
+	</div>
+
+</body>
+</html>	
