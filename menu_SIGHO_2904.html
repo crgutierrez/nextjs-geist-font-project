@@ -1,0 +1,291 @@
+﻿<script>
+	function getMenuRecursivo(Menu,ParamModule,idPai){
+		var params = "Param="+Menu+"&ParamModule="+ParamModule+"&idPai="+idPai;
+		$.ajax({
+			type: "POST",
+			url: "controller/controller.php",
+			data: params,
+			success: function(data){
+				$("#contentcolumn").html(data);	
+			}
+		});
+	}
+</script>
+<div style="display:none;">
+			<a href="#" onclick="getMenuRecursivo('SIGHO','2904','6')";>Internação</a> /
+			<a href="#" onclick="getMenuRecursivo('SIGHO','2904','2904')";>Internação</a> /
+	</div>
+<style>
+	.nav-tabs{
+	  background-color:#beecef;
+	}
+	.tab-content{
+	    background-color:#074a74;
+	    padding:1px;
+	    height:47px;
+	}
+	.nav-tabs > li > a{
+		font-size: 8pt;		
+		text-decoration:bold;
+		border: medium none;
+	    height:30px;
+	    color:black;
+	    text-align:center;
+	}
+	.nav-tabs > li > a:hover{
+	  	background-color: #074a74 !important;
+	    border: medium none;
+	    border-radius: 0;
+	    color:#fff;
+	}
+	.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+	    border-color: #074a74;
+	    border-bottom-color: transparent;
+	}
+	.nav-tabs {
+	   border-top: 1px solid #074a74;
+	   border-left: 1px solid #074a74;
+	   border-right: 1px solid #074a74;
+	}
+	.form-nobreak {
+	  height: 34px;
+	  padding: 6px 12px;
+	  font-size: 14px;
+	  line-height: 1.42857143;
+	  color: #555;
+	  background-color: #fff;
+	  background-image: none;
+	  border: 1px solid #ccc;
+	  border-radius: 4px;
+	  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+	       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	}	
+	.form-nobreak[disabled],
+	.form-nobreak[readonly],
+	fieldset[disabled] .form-nobreak {
+	  background-color: #fff;
+	  opacity: 1;
+	}	
+</style>
+<script>
+	var SAV_ABA = "";		// Salva ABA corrente (MTV-02/10/18)
+	var HAS_DESCR = "";		// Se S tem "campo descritivo" no formulario (MTV-02/10/18)
+
+	function getConteudo(){
+		//alert(tipordem);
+		if($("#clinica").val() == ""){
+			alert("Clinica nao indicada");
+			return;
+		}
+		var params = "Param=SIGHO&ParamModule=544&idPai=Do581&clinica="+$("#clinica").val()+"&nome="+$("#nome").val();
+		params += "&selRefClinica=" + $("#selRefClinica").val();
+		params += "&selOrderInter=" + $("#selOrderInter").val();
+		//params += "&tipordem=" + tipordem;		
+		//params += "&ori=pesq_htm";				
+		//alert(params);
+		//$("#debug").html(params);
+		$("#Conteudo").html("<center><img src='images/globais/loading.gif'> Aguarde... </center>");
+			$.ajax({
+				type: "POST",
+				url: "controller/controller.php",
+				data: params,
+				success: function(data){
+					$("#Conteudo").html(data);
+			}
+		});
+	}
+
+
+	function getConteudo_2(tipordem){
+		//alert(tipordem);
+		if($("#clinica").val() == ""){
+			alert("Clinica nao indicada");
+			return;
+		}
+		var params = "Param=SIGHO&ParamModule=544&idPai=Do581&clinica="+$("#clinica").val()+"&nome="+$("#nome").val();
+		params += "&selRefClinica=" + $("#selRefClinica").val();
+		params += "&selOrderInter=" + tipordem; //$("#selOrderInter").val();
+		//params += "&tipordem=" + tipordem;		
+		//params += "&ori=pesq_htm";				
+		//alert(params);
+		//$("#debug").html(params);
+		$("#Conteudo").html("<center><img src='images/globais/loading.gif'> Aguarde... </center>");
+			$.ajax({
+				type: "POST",
+				url: "controller/controller.php",
+				data: params,
+				success: function(data){
+					$("#Conteudo").html(data);
+			}
+		});
+	}
+	
+	
+	function addCampo(){
+		if ($("#clinica").val() == 0){
+			$("#show_nome").css({'display':''});
+			$("#show_ref").css({'display':'none'});
+		} else {
+			$("#show_nome").css({'display':'none'});
+			$("#show_ref").css({'display':''});
+		}
+	}
+	function showBusca(){
+		$("#Conteudo").html("");
+		$("#divBuscaPac").css({ display:""});
+		$("#clinica").focus();
+	}
+	
+	
+	function getLista_pac(){
+		
+		//$("#ConteudoPaciente").show();
+
+		var params = "Param=SIGHO&ParamModule=CONSPAC_OPEN";
+		params += "&TIPOBUSCA=LISTA_INTER";
+		
+		//params += "&TIPOBUSCA_LOCAL="+$("#TIPOBUSCA_LOCAL").val();
+ 		$("#Conteudo").html("<center> Aguarde... </center>");
+ 		//alert(params);
+		$.ajax({
+			type: "POST",
+			url: "controller/controller.php",
+			data: params,
+			success: function(data){
+				//alert(data);
+				$('html,body').scrollTop(0);
+				$("#divBuscaPac").css({ display:"none"});
+				$("#tela_busca").css({ display:"none"});				
+				$("#PACIENTE").val("");
+				//$("#ConteudoPaciente").html(data);
+				$("#Conteudo").html(data);
+			}
+		});
+	}
+	
+	
+	
+</script>
+
+<!-- Page Content -->
+<div id="page-content-wrapper">
+
+		<div class="col-lg-12 center-block" id="" style="margin-top:-7px; margin-bottom:10px; text-align:center; display:">
+			<div style="margin-left:5px; margin-right:5px;">
+				<button type="reset" class="btn-xs btn-default" onclick="getMenu('SYSTEM','PRINCIPAL');"><i style="font-size:20px;" class="fa fa-home fa-fw"></i> Home</button>&nbsp;
+				<button type="reset" class="btn-xs btn-default" onclick="showBusca();"><i style="font-size:20px;" class="fa fa-search fa-fw"></i> Buscar</button>&nbsp;
+	 		</div>
+		</div>		<!-- /.col-lg-12 -->
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-info" id="divBuscaPac" style="display:">
+	            <div class="panel-heading" style="height:40px;">
+	            	<div style="float:left;">
+	                 	<b>Consulta Pacientes Internados:</b>
+	                </div>
+	                <div style="text-align:right;">
+	                </div> 
+	            </div>
+	            <!-- /.panel-heading -->
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<label>Consulta Por Cl&iacute;nica: </label>
+							<select class="form-nobreak" id="clinica" onchange="addCampo()">
+								<option value="">Escolha uma Op&ccedil;&atilde;o</option>
+								<option value="0">Todas</option>
+								
+								<option value="001">CLINICA IMUNOLOGICA</option>
+								
+								<option value="002">PSIQUIATRIA FEMININA</option>
+								
+								<option value="003">PSIQUIATRIA MASCULINA</option>
+								
+								<option value="004">MATERNIDADE</option>
+								
+								<option value="007">UCI - NEONATAL</option>
+								
+								<option value="008">UTI - NEONATAL</option>
+								
+								<option value="010">UTI 1</option>
+								
+								<option value="011">UTI 3 - COVID</option>
+								
+								<option value="014">CLINICA CIRURGICA I</option>
+								
+								<option value="015">CLINICA NEUROLOGICA</option>
+								
+								<option value="016">CLINICA ORTOPEDICA 2</option>
+								
+								<option value="017">CLINICA CIRURGICA 2</option>
+								
+								<option value="018">CLINICA ORTOPEDICA 1</option>
+								
+								<option value="019">CLINICA CARDIOVASCULAR</option>
+								
+								<option value="020">CENTRO OBSTETRICO</option>
+								
+								<option value="021">CENTRO CIRURGICO</option>
+								
+								<option value="022">CLINICA MEDICA</option>
+								
+								<option value="023">HEMODINAMICA</option>
+								
+								<option value="025">HOSPITAL DIA</option>
+								
+								<option value="026">ALOJAMENTO CONJUNTO</option>
+								
+								<option value="030">UTI 2</option>
+								
+								<option value="032">SAMD ORTOPEDIA</option>
+								
+								<option value="034">ENFERMARIA OBSTETRICA</option>
+								
+							</select>
+							<span id="show_ref" style="display:none;">
+								<label>&nbsp;Refer&ecirc;ncia: </label>
+								<select class="form-nobreak" id="selRefClinica">
+									<option value="">Clinica atual</option>
+									<option value="O">Clinica de origem</option>
+									<option value="A">Clinica atual + Clinica de origem</option>
+								</select>
+							</span>
+							<span id="show_nome" style="display:none;">
+								<label>&nbsp;Filtro: </label>
+								<input class="form-nobreak" type="text" id="nome" size="30" onkeypress="if(event.keyCode == 13) getConteudo();">
+							</span>
+							<span id="show_order">
+								<label>&nbsp;Ordem: </label>
+								<select class="form-nobreak" id="selOrderInter">
+									<option value="">Data de interna&ccedil;&atilde;o</option>
+									<option value="N">Nome do Paciente</option>
+									<option value="C">Clinica + Leito</option>
+								</select>
+							</span>
+                           &nbsp;&nbsp;&nbsp;<input class="btn btn-success" type="button" onclick="getConteudo()" value="Buscar" > &nbsp;  <!--<input class="btn btn-primary" type="button" onclick="getLista_pac()" value="Interna&ccedil;&atilde;o Pendente SIGUE" >-->
+						</div>
+
+					</div>
+					<!--
+					<div class="row">
+						<div class="col-lg-6">
+							<input class="btn btn-success" type="button" onclick="getConteudo()" value="Buscar" >
+						</div>
+					</div>
+                    -->
+				</div>
+				<!-- /.panel-body -->
+			</div>					
+		</div>
+	</div>
+	<span id="debug"></span>
+	<div id="Conteudo" style="margin-top:20px;"></div>
+
+</div>
+<!-- /#page-content-wrapper -->
+
+<script>setActualItemMenu("SIGHO6");</script>
