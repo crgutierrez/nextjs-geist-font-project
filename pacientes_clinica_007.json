@@ -1,0 +1,136 @@
+{
+  "timestamp": "2025-05-25 22:58:16",
+  "clinic_code": "007",
+  "patients": [
+    {
+      "nome": "MARIAH SOUZA DOS SANTOS",
+      "leito": "556036",
+      "data": "007.041-0001"
+    },
+    {
+      "nome": "MARIANA SOUZA DOS SANTOS",
+      "leito": "556030",
+      "data": "007.041-0002"
+    },
+    {
+      "nome": "JESICA ROLIN TIVI",
+      "leito": "556210",
+      "data": "007.042-0006"
+    },
+    {
+      "nome": "ELOAH SILVA LOPES",
+      "leito": "555667",
+      "data": "007.042-0007"
+    },
+    {
+      "nome": "ESTHER SILVA LOPES",
+      "leito": "555666",
+      "data": "007.042-0008"
+    },
+    {
+      "nome": "RN DE KETHELLY RAIANNY CODONHO ESTEVAO",
+      "leito": "556717",
+      "data": "007.043-0009"
+    },
+    {
+      "nome": "RN DE REGISLEIDE NASCIMENTO DA SILVA",
+      "leito": "556720",
+      "data": "007.043-0010"
+    },
+    {
+      "nome": "RN DE NATHALIA SOUZA CARVALHO",
+      "leito": "556157",
+      "data": "007.043-0011"
+    },
+    {
+      "nome": "RN DE GISLANE AMAECING MENDES",
+      "leito": "557024",
+      "data": "007.043-0012"
+    },
+    {
+      "nome": "VITORIA COSTA LEITE",
+      "leito": "554419",
+      "data": "007.043-0013"
+    },
+    {
+      "nome": "RN DE LORRAINE STEFHANNY A DA SILVA",
+      "leito": "556665",
+      "data": "007.043-0014"
+    },
+    {
+      "nome": "RN SILMARA COELLHO SENA DE MELO",
+      "leito": "556463",
+      "data": "007.043-0015"
+    },
+    {
+      "nome": "RN DE KEILA VERA DOS SANTOS",
+      "leito": "557169",
+      "data": "007.043-0016"
+    },
+    {
+      "nome": "RN DE SUELLANY DANTAS LIMA",
+      "leito": "556525",
+      "data": "007.043-0017"
+    },
+    {
+      "nome": "VINICIUS BARBOSA BRAZ",
+      "leito": "555503",
+      "data": "007.043-0018"
+    },
+    {
+      "nome": "RN DE LUANA CRISTINA PALU",
+      "leito": "557073",
+      "data": "007.043-0019"
+    },
+    {
+      "nome": "ESTEPHANY VITORIA DOS SANTOS BRAGA",
+      "leito": "554863",
+      "data": "007.043-0020"
+    },
+    {
+      "nome": "RN DE DANIELLY BATISTA DA CRUZ",
+      "leito": "556830",
+      "data": "007.043-0022"
+    },
+    {
+      "nome": "ANTHONY RAVI BOTELHO CARVALHO",
+      "leito": "556964",
+      "data": "007.044-0023"
+    },
+    {
+      "nome": "RN DE FLAVIANE VARGAS DE MELO",
+      "leito": "556819",
+      "data": "007.044-0024"
+    },
+    {
+      "nome": "JOSE MIGUEL BASTOS SIMONETE",
+      "leito": "556466",
+      "data": "007.044-0026"
+    },
+    {
+      "nome": "RN DE MARIA ISABEL ARTEAGA PARADA",
+      "leito": "556919",
+      "data": "007.044-0027"
+    },
+    {
+      "nome": "RN DE DAIANE ALMEIDA PINTO",
+      "leito": "557188",
+      "data": "007.044-0028"
+    },
+    {
+      "nome": "RN DE EDUARDA DE SOUZA",
+      "leito": "556809",
+      "data": "007.044-0029"
+    },
+    {
+      "nome": "RN DE MONICA DE JESUS MATOS DA COSTA",
+      "leito": "556821",
+      "data": "007.044-0030"
+    },
+    {
+      "nome": "Nenhum paciente encontrado para a busca!",
+      "leito": "",
+      "data": ""
+    }
+  ]
+}
