@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><link rel='shortcut icon' href='/favicon.ico' type='image/ico' >
+
+<script type="text/javascript" src="jscripts/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="jscripts/home.js"></script>
+<script type="text/javascript" src="jscripts/ddaccordion.js"></script>
+<script type="text/javascript" src="jscripts/jquery-1.2.2.pack.js"></script>
+<script type="text/javascript" src="jscripts/ssame.js"></script>
+<script type="text/javascript" src="jscripts/conf.js"></script>
+<script type="text/javascript" src="jscripts/login.js"></script>
+<script type="text/javascript" src="jscripts/jquery.ui.js"></script>
+<script type="text/javascript" src="jscripts/jquery.form.js"></script>
+<script type="text/javascript" src="jscripts/jquery.calendar.js"></script>
+<script type="text/javascript" src="jscripts/jquery.asmselect.js"></script>
+</head>
+<body><!DOCTYPE html>
+<html lang="en"><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Prefeitura Rio | SMS-ATI | Prontuario Carioca">
+    <meta name="author" content="LibreMed Opensource">
+    <meta name="theme-color" content="#c5e0fc" />
+    <title>Prontu&aacute;rio Eletronico</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/bootstrap-dialog.css" rel="stylesheet">
+    <link href="css/home-nav.css" rel="stylesheet"> 
+	<style>
+		#area_map {   
+		    height: 659px !important;
+		}
+		.disableArea { pointer-events: none; filter: alpha(opacity=100); -moz-opacity: 1; -khtml-opacity: 1; opacity: .2; z-index: 1010; }
+		#over_map { position: absolute; top: 105px; left: 5px; z-index: 99; }
+		#load_div { position: absolute; top: 100px; width: 100%; z-index: 99; }
+		.form-nobreak {
+			height: 34px;
+			padding: 6px 12px;
+			font-size: 14px;
+			line-height: 1.42857143;
+			color: #555;
+			background-color: #fff;
+			background-image: none;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+			        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+			-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+			       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+			          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+		}	
+		.form-nobreak[disabled],
+		.form-nobreak[readonly],
+		fieldset[disabled] .form-nobreak {
+	  		background-color: #eee;
+	  		opacity: 1;
+		}	
+	  	#banner {
+		    position: fixed;        
+		    left: 0px;
+		    height: 58px;
+		    width: 180px;
+		    padding: 10px 5px;
+		    text-align: left;
+		    background-color: #c5e0fc;
+		    border: 2px solid #003366;
+			top: 0px;
+		}
+	</style>
+	
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+	<script src="js/jquery.mask.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/bootstrap-dialog.js"></script>
+	<script src="jscripts/ajaxfileupload.js" type="text/javascript"></script>
+    <script src="js/actionMvsi.js"></script>
+    
+    <script type="text/javascript" src="jscripts/funcoes.js"></script>
+    <script src="jscripts/sweetalert.js"></script>
+    <link rel="stylesheet" href="css/sweetalert.css">
+
+
+	<script type="text/javascript">
+		var LOCAL_BASE = "https://hb-hospub.sesau.ro.gov.br/prontuario/";
+	   	var LOCAL_WEB = "https://hb-hospub.sesau.ro.gov.br/prontuario/frontend/";
+	   	var LOCAL_ADM = "https://hb-hospub.sesau.ro.gov.br/sah/";
+	   	var LOCAL_GST = "https://hb-hospub.sesau.ro.gov.br/sah/";
+	   	var LOCAL_GST_WEB = "https://hb-hospub.sesau.ro.gov.br/sah/";
+	   	var LOCALWEB_HOME = LOCAL_WEB;
+	   	var OPEN_OR_CLOSE = "0";
+	   	var TITLE_APP = "Prontu&aacute;rio Eletronico";
+		var BOX_TITLE_COLOR = "BootstrapDialog.TYPE_PRIMARY"; 
+		var LEVEL = "{user_level}";;
+		var USER_MAIL = "{user_mail}";
+		var OPEN_OR_CLOSE = "0";					// 1=Open, 0=Close (Menu)
+		var DISP_TYPE = "{disp_type}";
+		var SHW_MNU = 0;
+	   	var SEEK_FROM_MAP = "";
+	   	var BACK_FROM_MAP = "";
+	   	var ITEM_FROM_MAP = "";	
+	
+		function mv_loadMenu() {					// Funcao para ser chamado pelo ANDROID - cabecalho INIBIDO
+			$("#menu-toggle").trigger('click');
+		}
+		function goMainMenu() {
+			window.location = LOCAL_ADM + "core/menu";
+		}	
+		function logoutSystem() {
+			//alert(LOCAL_WEB);
+			//alert(LOCAL_BASE);
+			//exit;
+			window.location = LOCAL_ADM + "core/logout";
+		}	
+		function goTop() {
+			$('html,body').scrollTop(0);
+		}	
+		function goPage(Menu,ParamModule,page) {
+			var params  = "Param="+Menu;
+			params += "&ParamModule="+ParamModule;
+			params += "&page="+page;
+			$.ajax({
+				type: "POST",
+				url: OPV_WebPlugin+"controller/controller.php",
+				data: params,
+				success: function(data){
+					$("#cont-col").html(data);
+				}
+			});
+		}		
+		function dm_logout() {
+		    BootstrapDialog.show({
+		        title: 'Sair realmente do '+TITLE_APP,
+		        message: 'Escolha uma das op&ccedil;&otilde;es:',
+		        buttons: [{
+		            label: 'N&atilde;o',
+		            action: function(dialog) {
+		                //dialog.setMessage('Message 1');
+		                dialog.close();
+		            }
+		        }, {
+		            label: 'Sim',
+		            action: function(dialog) {
+		                //dialog.setMessage('Message 2');
+		                //sair();
+		            	logoutSystem();
+		            }
+		        }]
+		    });
+		}
+		function setDimensionApp() {
+			$("#appWidth").val($(document).width());
+			var getw = $(document).width();
+			var margem = parseInt(getw)-180;
+			$("#banner").css('margin-left',margem+'px');
+		}
+	    function ajustHeightMenu() {
+	    	if ($("#sidebar-wrapper").height() > $("#wrapper").height()) {
+	        	var newH = parseInt($("#sidebar-wrapper").height()) + 1;
+	    		$('#contentcolumn').css('min-height', newH+'px');
+	    		$('#sidebar-wrapper').css('min-height', newH+'0px'); // johny alterou os valores.scroll infinito esta com 360px
+	    	}
+	    }
+		function setActualItemMenu(item) {			// Atualiza classe de realce do MENU  ------------------------------------------------------------------
+	    	//$("#debug-topo").html("0: wrapper / window / sidebar-wrapper: " + $("#wrapper").height() + " / " + $(window).height() + " / " + $("#sidebar-wrapper").height())
+			//alert(item);
+	    	if ($("#wrapper").height() > $(window).height()) {
+	    		$("#sidebar-wrapper").height($("#wrapper").height());
+	    	}
+	   		var actual = $("#mnu_atual").val();
+	    	$("#liMnu"+actual).removeClass("active");
+	    	$("#liMnu"+item).addClass("active");
+	    	$("#mnu_atual").val(item);
+	    	goTop();
+		}	
+	    function dm_error(msg) {
+	        var dialogInstance2 = new BootstrapDialog();
+	        dialogInstance2.setTitle("Aten&ccedil;&atilde;o");
+	        dialogInstance2.setMessage(msg);
+	        dialogInstance2.setType(BootstrapDialog.TYPE_DANGER);
+	        dialogInstance2.open(); 
+	    }
+		function dm_message(title, msg) {
+			var color = BOX_TITLE_COLOR;
+			if (title=="Erro") {
+				color = BootstrapDialog.TYPE_DANGER
+			}
+		    BootstrapDialog.show({
+		        title: title,
+		        type: color,
+		        message: msg,
+		        buttons: [{
+		            label: 'Ok',
+		            action: function(dialog) {
+		        		dialog.close();
+		            }
+		        }]
+		    });
+	    }
+		function dm_question(tit, msg, action) {
+		    BootstrapDialog.show({
+		        title: tit,
+		        type: BOX_TITLE_COLOR,
+		        message: msg,
+		        buttons: [{
+		            label: 'N&atilde;o',
+		            action: function(dialog) {
+		                //dialog.setMessage('Message 1');
+		        		dialog.close();
+		            }
+		        }, {
+		            label: 'Sim',
+		            action: function(dialog) {
+		                //dialog.setMessage('Message 2');
+		        		eval(action);
+		        		dialog.close();
+		            }
+		        }]
+		    });
+		}
+		function dm_message_foco(tit, msg, foco) {
+			var color = BOX_TITLE_COLOR;
+			if (tit=="Erro") {
+				color = BootstrapDialog.TYPE_DANGER
+			}
+		    BootstrapDialog.show({
+		        title: tit,
+		        type: color,
+		        message: msg,
+		        buttons: [{
+		            label: 'Ok',
+		            action: function(dialog) {
+		                //dialog.setMessage('Message 1');
+		        		dialog.close();
+		                eval(foco);
+		            }
+		        }]
+		    });
+		}
+		function daj_runJS(funcao) {		// Testa sessao e se OK executa ACAO
+			$.ajax({
+				type: "POST",
+				url: LOCAL_WEB+"controller/checkSession.php",
+				data: "",
+				success: function(data){
+					var cod = data.split("|");
+					if (cod[1]=="nok") {
+						alert("Sessao encerrada por inatividade!")
+						logoutSystem();
+					} else {
+						eval(funcao);
+					}
+					//------------------------------------------------------------------------
+				},
+				error: function (data, status, e){
+					alert("Erro ao procesar requisicao");
+				}			
+			});
+		}	    
+		function azj_doCommand(Menu,ParamModule,file){
+	    	hideMe();
+	    	azj_doCommandKey(Menu,ParamModule,file,"","");
+	    }
+		function azj_doCommandColor(Menu,ParamModule,color){
+	    	hideMe();
+	    	azj_doCommandKey(Menu,ParamModule,"","",color);
+	    }
+		function azj_doCommandKey(Menu,ParamModule,file,key,color){
+			var uv_siteLoad = "";
+			var params = "Param="+Menu+"&ParamModule="+ParamModule;
+			params += key;
+			if (file!="") {
+				uv_siteLoad = file; 
+			} else {
+				uv_siteLoad = "controller/controller.php";
+			}
+			//$("#cont-col").html(uv_siteLoad + " - " + params);
+			//alert(uv_siteLoad + " - " + params);
+			$.ajax({
+				type: "POST",
+				url: LOCAL_WEB + uv_siteLoad,
+				data: params,
+				success: function(data){
+					if ($("#bkgcolor").val()!="#fff" && color=="") {
+						$("#bkgcolor").val("#fff");
+						$("#wrapper").css("background","#fff");
+					} else if (color!="") {
+						$("#bkgcolor").val(color);
+						$("#wrapper").css("background",color);
+					}
+					$("#wrapper").html(data);
+				},
+		        error: function (data, status, e){
+		            //alert("Erro: "+e);
+					alert("Sessao encerrada por inatividade!")
+					logoutSystem();
+				}
+			});
+		}
+		function loadUrl(url, type) {
+			if (type=="A") {
+				url = LOCAL_ADM + url;
+			} else if (type=="P") {
+				url = LOCAL_BASE + url;
+			}
+			document.forms["callUrl"].action = url;
+			document.forms["callUrl"].submit();
+		}
+	</script>
+</head>
+<div id="bs_navToPage" style="display:none;">
+</div>
+<div id="over_map" style="display:none;">
+	<div style="margin-top:4px; margin-left:5px; margin-right:5px;">
+		<button type="reset" class="btn-xs btn-success" style="height:30px; width:90px; text-align:left;" onclick="backFromMap();"><i class="fa fa-long-arrow-left fa-fw"></i> Listar</button>
+		<div style="margin-top:5px;">
+			<button type="reset" class="btn-xs btn-success" style="height:30px; width:90px; text-align:left;" onclick="newSeek();"><i class="fa fa-search fa-fw"></i> Pesquisar</button>
+		</div>
+		<div style="margin-top:5px;">
+			<button type="reset" class="btn-xs btn-success" style="height:30px; width:90px; text-align:left;" onclick="alert('Em desenvolvimento');"><i class="fa fa-map-marker fa-fw"></i> Rota</button>
+		</div>
+ 	</div>
+</div>
+<body id="myBody">
+	<div id="fullArea">
+    <nav class="navbar navbar-default no-margin" style="background-color:#c5e0fc;display:">
+    <!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header fixed-brand">
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" id="menu-toggle">
+		      <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+		    </button>
+		    <a class="navbar-brand" href="javascript:goTop();" onclick="dm_logout();" title="Sair do Prontu&aacute;rio Eletronico" style="color:#000000; size:14px; display:none;"><i class="fa fa-power-off fa-fw"></i> LibreMed</a>
+			<div style="height:55px;margin-top:2px;display:"><a href="#" onclick="dm_logout();" title="Sair do Prontu&aacute;rio Eletronico"><img style="margin-left:10px;" src="https://hb-hospub.sesau.ro.gov.br/prontuario/frontend/images/pe.png"></a></div>
+		</div><!-- navbar-header-->
+		
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button></li>
+            </ul>
+            <span id="debug-topo" style="display:none;">AREA DE DEBUG</span>
+		</div><!-- bs-example-navbar-collapse-1 -->
+    </nav>
+   	<input type="hidden" id="mnu_atual" name="mnu_atual" value="SYSTEMPRINCIPAL">
+   	<input type="hidden" id="bkgcolor" name="bkgcolor" value="#fff">
+   	<input type="hidden" id="appWidth" name="appWidth" value="">
+   	<input type="hidden" id="lm_userName" name="lm_userName" value="QW7DtG5pbW8=">
+   	<input type="hidden" id="lm_userInsc" name="lm_userInsc" value="">
+   	<input type="hidden" id="lm_userConsel" name="lm_userConsel" value="">
+   	<input type="hidden" id="lm_cpf" name="lm_cpf" value="">
+
+	<div style="display:none;">
+		<form name="callUrl" id="callUrl" action="" method="post" target='_blank'>
+		   	<input type="text" id="Param" name="Param" value="" />
+		   	<input type="text" id="ParamModule" name="ParamModule" value="" />
+			<input type="text" id="oper" name="oper" value="" />
+			<input type="text" id="type" name="type" value="" />
+			<input type="text" id="selOrdem" name="selOrdem" value="" />
+			<input type="text" id="repoFld1" name="repoFld1" value="" />
+			<input type="text" id="repoFld2" name="repoFld2" value="" />
+			<input type="text" id="repoFld3" name="repoFld3" value="" />
+			<input type="text" id="repoFld4" name="repoFld4" value="" />
+			<input type="text" id="repoFld5" name="repoFld5" value="" />
+			<input type="text" id="repoFld6" name="repoFld6" value="" />
+		    <input type="submit" value="ok" >
+		</form>
+	</div>   	
+   	
+	<div id="area_map" style="display:none;">
+	</div>   	
+   	
+    <div class="toggled-1" id="wrapper">	<!-- class="": MENU VISIVEL, class="toggled-2": MENU RECOLHIDO -->
+		<!-- Sidebar -->
+<div id='sidebar-wrapper' style='background-color:#003366'>
+<ul class='sidebar-nav nav-pills nav-stacked' id='menu'>
+<li id='liMnuSYSTEMPRINCIPAL' class=''>
+<a href='#' onclick="getMenu('SYSTEM','PRINCIPAL')"><span class='fa-stack fa-lg pull-left'><i class='fa fa-home fa-stack-1x '></i></span> Home</a>
+</li>
+<li id='liMnuSYSTEM2744' class=''>
+<a href='#SYSTEM#2744' onclick="getMenu('SYSTEM','2744')"><span class="fa-stack fa-lg pull-left"><i class="fa fa-check fa-stack-1x "></i></span>AIH</a>
+</li>
+<li id='liMnuPRESC6020' class=''>
+<a href='#PRESC#6020' onclick="getMenu('PRESC','6020')"><span class="fa-stack fa-lg pull-left"><i class="fa fa-check fa-stack-1x "></i></span>Laboratorio (Ger. de Exames)</a>
+</li>
+<li id='liMnuREGE3737' class=''>
+<a href='#REGE#3737' onclick="getMenu('REGE','3737')"><span class="fa-stack fa-lg pull-left"><i class="fa fa-check fa-stack-1x "></i></span>Aguardando Parecer</a>
+</li>
+<li id='liMnuSYSTEM6026' class=''>
+<a href='#SYSTEM#6026' onclick="getMenu('SYSTEM','6026')"><span class="fa-stack fa-lg pull-left"><i class="fa fa-check fa-stack-1x "></i></span>Pulseira Paciente</a>
+</li>
+<li id='liMnu0' class=''>
+</ul>
+</div><!-- /#sidebar-wrapper -->
+<input type='hidden' id='qtdItensMenu' value='0'>
+	
+		<input type="hidden" name="session" size="10" value="{sessionid}" />
+	
+        <div id="contentcolumn">	
+        
+	        <!-- Page Content -->
+	        <div id="page-content-wrapper">
+
+				<div class="row" style="display:">
+					<div class="col-lg-3">
+						<div style="margin-top:0px; margin-left:20px; margin-bottom:10px;">
+							<img src="https://hb-hospub.sesau.ro.gov.br/prontuario/frontend/images/em_branco.png">
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="panel panel-default">
+		                   	<div class="panel-body" style="height:320px;margin-left:15px;">
+		                    <h2 style="color:#074a74">Hospital de Base Dr. Ary Pinheiro</h2>	
+	        							        			<b id="Erro"></b>	&nbsp;&nbsp;
+								<div class="form-group">
+									<label>Usu&aacute;rio:</label>
+									<input class="form-control" style="width:200px;" type="text" id="user" name="user" value="" >
+								</div>
+								<div class="form-group">
+									<label>Senha:</label>
+									<div class="form-inline">
+										<input class="form-nobreak" style="width:200px;" type="password" id="pass" name="pass" value="" maxlength="8" onkeydown="loginEvent(event)"/>
+		                            	&nbsp;<button type="button" class="btn btn-success" onclick="login();">Entrar</button>
+		                            </div>
+								</div>
+		        				<script>$("#user").focus();</script>
+			        									</div>
+						</div>
+					</div>
+					<div>
+					<!--	echo "aqui";  -->
+					</div>
+					<div id="areaDebugMain"></div>
+					
+				</div>		<!-- row -->					
+
+	        </div>
+					<!-- <div class="text-center" >
+
+					echo'<iframe title="Report Section" width="800" height="600" src="https://app.powerbi.com/view?r=eyJrIjoiZGY4MmNiMjItNmQ3MS00M2YyLWI5NTQtNjM2N2YxNjEzMTA3IiwidCI6IjI3YTgzY2JlLTY5YzMtNDM3Ny1iN2QzLTg0YTU2ZDhiMmJhMCJ9" frameborder="0" allowFullScreen="true"></iframe>';
+						
+					</div> -->
+	        <!-- /#page-content-wrapper -->
+
+        </div>	<!-- contentcolumn -->
+
+    </div>
+    <!-- /#wrapper -->
+  	<!-- NAO ALTERAR A LOCALIZACAO DO SCRIPT ABAIXO -->
+    <script src="js/sidebar_menu.js"></script>   
+    
+	<div class="modal fade">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">ï¿½</button>
+	        <h3 class="modal-title">Modal title</h3>
+	      </div>
+	      <div class="modal-body">
+	        <p>One fine bodyï¿½</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->    
+	
+	</div>
+	<div id="load_div" style="display:none;">
+		<div class="row" style="text-align:center;">
+			<div class="center-block" style="background-color:{color_top}; color:{color_top_title}; width:110px;">
+				<div class="panel-heading" style="text-align:middle; font-size:10pt;">
+					AGUARDE...
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="banner">
+		<div style="margin-left:2px; margin-top:-2px;">
+			<strong><i class="fa fa-building-o fa-fw"></i> HB</strong>
+		</div>
+		<div style="margin-left:2px; margin-top:2px;">
+			<i class="fa fa-user fa-fw"></i> ANONYMOUS		</div>
+	</div>
+	<script>
+		ajustHeightMenu();
+		setActualItemMenu("SYSTEMPRINCIPAL");
+		window.onresize = setDimensionApp;
+		setDimensionApp();
+	</script>
+</body></html>
